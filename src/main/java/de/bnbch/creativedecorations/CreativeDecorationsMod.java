@@ -1,6 +1,8 @@
 package de.bnbch.creativedecorations;
 
 import com.mojang.logging.LogUtils;
+import de.bnbch.creativedecorations.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -27,6 +29,8 @@ public class CreativeDecorationsMod
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        ModItems.register(modEventBus);
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -48,7 +52,9 @@ public class CreativeDecorationsMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS){
+            event.accept(ModItems.Antique_Red_Brick);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -60,8 +66,8 @@ public class CreativeDecorationsMod
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents{
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
